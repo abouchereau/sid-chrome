@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SID Chrome</title>
+    <script type="text/javascript" src="SidAudio.js"></script>
+</head>
+<body>
+    <button id="start-btn">START</button>
+   <!-- <audio id="audio">
+        <source src="test.flac" type="audio/flac">
+    </audio>     -->
+      <script>
+        //document.getElementById('start-btn').addEventListener('click',(e)=> {
+            //document.getElementById('audio').play();
+        //})
+(async()=>{
+    const sidAudio = new SidAudio();
+    await sidAudio.init();
+
+    document.getElementById('start-btn').addEventListener('click',(e)=> {
+            sidAudio.start();
+        })
+})();
+
+      </script>
+</body>
+</html>
