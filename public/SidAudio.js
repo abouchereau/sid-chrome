@@ -6,7 +6,12 @@ class SidAudio  {
     scriptNode = [];
     panner = [];
     gain = [];
+    socket = null;
 
+    constructor() {
+        this.PORT_WEB = 3615;
+        this.POST_WS = 3616;
+    }
 
     async init() {
         this.audioContext = new AudioContext({
@@ -35,6 +40,28 @@ class SidAudio  {
 
        
        
+    }
+
+    initWebSocket() {
+        this.socket = new WebSocket("ws://localhost:"+this.POST_WS);
+
+        this.socket.onopen = e=>{
+            console.log("Socket Open");
+        };
+  
+        this.socket.onmessage = e=>{
+            if (e.data.indexOf("PAN") == 0) {
+                let tmp = e.data.split("|");
+                this.pan(parseInt(tmp[1]), parseInt(tmp[2]));
+            }
+            else if (e.data.indexOf("VOL") == 0) {
+                let tmp = e.data.split("|");
+                this.gain(parseInt(tmp[1]), parseInt(tmp[2]));
+            }
+            else {
+                this.send(JSON.parse(e.data));
+            }
+        };
     }
 
     pan(voice, value) {//value de -100 à 100
