@@ -40,6 +40,11 @@ export default class SidChrome {
     console.log("Browser Launched");
   }
 
+  async stopBrowser() {
+      await this.browser.close();
+      console.log("Browser closed");
+  }
+
   async clickStart() {
     await this.page.locator('#start-btn').click();
     console.log("Start clicked");
@@ -53,6 +58,17 @@ export default class SidChrome {
     console.log("Web server launched");
   }
 
+
+  async closeWebServer() {
+    this.server.close(err=>{
+      if (err) {
+        console.error('There was an error', err.message)
+      } else {
+        console.log('http server closed successfully. Exiting!');
+      }
+    })
+  }
+
   async launchSocketServer() {
     this.wsServer = new WebSocketServer({ port: this.POST_WS });
 
@@ -60,6 +76,15 @@ export default class SidChrome {
       console.log("WebSocket launched");
         ws.on('error', console.error);     
       });
+    }
+
+    async closeWebSocket() {
+      wss.clients.forEach((socket) => {
+        if ([socket.OPEN, socket.CLOSING].includes(socket.readyState)) {
+          socket.terminate();
+        }
+      });
+
     }
 
     sendMessageSocket(data) {
