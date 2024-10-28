@@ -11,7 +11,7 @@ export default class SidChrome {
 //TODo : close methods
 
   constructor() {
-    this.PORT_WEB = 3615;
+    this.PORT_WEB = 3617;
     this.POST_WS = 3616;
     this.bowser = null;
     this.pageWeb = null;
