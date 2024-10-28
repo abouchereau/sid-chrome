@@ -54,6 +54,7 @@ export default class SidChrome {
     return new Promise((resolve, reject)=> {
       this.server = express();
       const __dirname = dirname(fileURLToPath(import.meta.url));
+      console.log(__dirname);
       this.server.use(express.static(__dirname+"/public"));
       this.httpServer = this.server.listen(this.PORT_WEB, () => {
         console.log("Web server launched");
