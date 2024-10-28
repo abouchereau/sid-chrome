@@ -51,29 +51,43 @@ export default class SidChrome {
   }
 
   async launchWebServer()  {
-    this.server = express();
-    const __dirname = dirname(fileURLToPath(import.meta.url));
-    this.server.use(express.static(__dirname+"/public"));
-    this.server.listen(this.PORT_WEB);
-    console.log("Web server launched");
+    return new Promise((resolve, reject)=> {
+      this.server = express();
+      const __dirname = dirname(fileURLToPath(import.meta.url));
+      this.server.use(express.static(__dirname+"/public"));
+      this.httpServer = this.server.listen(this.PORT_WEB, () => {
+        console.log("Web server launched");
+        resolve();
+      });
+    });
   }
 
 
   async closeWebServer() {
-    this.server.close(err=>{
-      if (err) {
-        console.error('There was an error', err.message)
-      } else {
-        console.log('http server closed successfully. Exiting!');
-      }
-    })
+      return new Promise((resolve, reject)=> {
+        this.server.close(err=>{
+          if (err) {
+            console.error('There was an error', err.message)
+
+          resolve();
+          } else {
+            console.log('http server closed successfully. Exiting!');
+
+          resolve();
+          }
+        })
+      });
   }
 
   async launchSocketServer() {
-    this.wsServer = new WebSocketServer({ port: this.POST_WS });
-    this.wsServer.on('connection', function connection(ws) {      
-      console.log("WebSocket launched");
-        ws.on('error', console.error);     
+
+    return new Promise((resolve, reject)=> {
+      this.wsServer = new WebSocketServer({ port: this.POST_WS });
+      this.wsServer.on('connection', function connection(ws) {    
+        resolve();  
+        console.log("WebSocket launched");
+          ws.on('error', console.error);     
+        });
       });
     }
 
