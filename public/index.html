@@ -18,7 +18,6 @@
 (async()=>{
     const sidAudio = new SidAudio();
     await sidAudio.init();
-
     document.getElementById('start-btn').addEventListener('click',(e)=> {
             sidAudio.start();
         })

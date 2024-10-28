@@ -1,6 +1,6 @@
 import puppeteer from 'puppeteer';
 import express from 'express';
-import { WebSocketServer } from 'ws';
+import { WebSocketServer, WebSocket } from 'ws';
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -71,7 +71,6 @@ export default class SidChrome {
 
   async launchSocketServer() {
     this.wsServer = new WebSocketServer({ port: this.POST_WS });
-
     this.wsServer.on('connection', function connection(ws) {      
       console.log("WebSocket launched");
         ws.on('error', console.error);     
@@ -79,7 +78,7 @@ export default class SidChrome {
     }
 
     async closeWebSocket() {
-      wss.clients.forEach((socket) => {
+      this.wsServer.clients.forEach((socket) => {
         if ([socket.OPEN, socket.CLOSING].includes(socket.readyState)) {
           socket.terminate();
         }
@@ -87,11 +86,10 @@ export default class SidChrome {
 
     }
 
-    sendMessageSocket(data) {
-      let strData = JSON.stringify(data);
+    sendMessageSocket(data, isJson=true) {
+      let strData = isJson?JSON.stringify(data):data;
       this.wsServer.clients.forEach(client => {
         if (client.readyState === WebSocket.OPEN) {
-          console.log("send "+strData);
           client.send(strData);
         }
       });    
