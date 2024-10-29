@@ -1,12 +1,13 @@
 import http from 'http';
-import { path, dirname } from 'node:path';
-import { url, fileURLToPath } from 'node:url';
+import path from 'path';
+import url from 'url';
+import fs from 'fs';
 
 export default class WebServer {
 
-    constructor() {
-        this.PORT = 3615;
-        this.BASE_DIR = dirname(fileURLToPath(import.meta.url));
+    constructor(port, relativePath) {
+        this.port = port;
+        this.baseDir = path.dirname(url.fileURLToPath(import.meta.url))+"/public";
         this.server = null;
     }
 
@@ -16,10 +17,7 @@ export default class WebServer {
             this.server = http.createServer((request, response)=>{
                 try {
                     const requestUrl = url.parse(request.url)
-            
-                    // need to use path.normalize so people can't access directories underneath baseDirectory
-                    const fsPath = this.BASE_DIR+path.normalize(requestUrl.pathname)
-            
+                    const fsPath = this.baseDir+path.normalize(requestUrl.pathname);            
                     const fileStream = fs.createReadStream(fsPath)
                     fileStream.pipe(response)
                     fileStream.on('open', function() {
@@ -37,7 +35,7 @@ export default class WebServer {
             }
             });
             
-            this.server.listen(this.PORT,()=>{
+            this.server.listen(this.port,()=>{
                 resolve();
             })
         });

@@ -1,8 +1,6 @@
 import puppeteer from 'puppeteer';
 import { WebSocketServer, WebSocket } from 'ws';
-import { dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import server from 'node-http-server';
+import WebServer from './WebServer';
 
 
 
@@ -18,6 +16,7 @@ export default class SidChrome {
     this.pageWeb = null;
     this.server = null;
     this.wsServer = null;
+    this.webServer = new WebServer(this.PORT_WEB, "/public");
   }
 
   async startAll() {
@@ -37,7 +36,7 @@ export default class SidChrome {
     });
     this.page = await this.browser.newPage();    
     
-    await this.page.goto('http://localhost:'+this.PORT_WEB);  
+    await this.page.goto('http://localhost:'+this.PORT_WEB+"/index.html");  
     console.log("Browser Launched");
   }
 
@@ -52,41 +51,12 @@ export default class SidChrome {
   }
 
   async launchWebServer()  {
-    return new Promise((resolve, reject)=> {
-      server.deploy(
-        {
-            port:8000,
-            root:'~/myApp/'
-        },
-        serverReady
-    );
-    
-     /* this.server = express();
-      const __dirname = dirname(fileURLToPath(import.meta.url));
-      console.log(__dirname);
-      this.server.use(express.static(__dirname+"/public"));
-      this.httpServer = this.server.listen(this.PORT_WEB, () => {
-        console.log("Web server launched");
-        resolve();
-      });*/
-    });
+      await this.webServer.start();
   }
 
 
   async closeWebServer() {
-      return new Promise((resolve, reject)=> {
-       /* this.server.close(err=>{
-          if (err) {
-            console.error('There was an error', err.message)
-
-          resolve();
-          } else {
-            console.log('http server closed successfully. Exiting!');
-
-          resolve();
-          }
-        })*/
-      });
+    await this.webServer.close();
   }
 
   async launchSocketServer() {
