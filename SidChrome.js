@@ -1,8 +1,9 @@
 import puppeteer from 'puppeteer';
-import express from 'express';
 import { WebSocketServer, WebSocket } from 'ws';
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import server from 'node-http-server';
+
 
 
 export default class SidChrome {
@@ -11,7 +12,7 @@ export default class SidChrome {
 //TODo : close methods
 
   constructor() {
-    this.PORT_WEB = 8000;
+    this.PORT_WEB = 3615;
     this.POST_WS = 3616;
     this.bowser = null;
     this.pageWeb = null;
@@ -52,21 +53,29 @@ export default class SidChrome {
 
   async launchWebServer()  {
     return new Promise((resolve, reject)=> {
-      this.server = express();
+      server.deploy(
+        {
+            port:8000,
+            root:'~/myApp/'
+        },
+        serverReady
+    );
+    
+     /* this.server = express();
       const __dirname = dirname(fileURLToPath(import.meta.url));
       console.log(__dirname);
       this.server.use(express.static(__dirname+"/public"));
       this.httpServer = this.server.listen(this.PORT_WEB, () => {
         console.log("Web server launched");
         resolve();
-      });
+      });*/
     });
   }
 
 
   async closeWebServer() {
       return new Promise((resolve, reject)=> {
-        this.server.close(err=>{
+       /* this.server.close(err=>{
           if (err) {
             console.error('There was an error', err.message)
 
@@ -76,7 +85,7 @@ export default class SidChrome {
 
           resolve();
           }
-        })
+        })*/
       });
   }
 
