@@ -1,6 +1,6 @@
 import puppeteer from 'puppeteer';
 import { WebSocketServer, WebSocket } from 'ws';
-import WebServer from './WebServer';
+import WebServer from './WebServer.js';
 
 
 
