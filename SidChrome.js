@@ -62,7 +62,7 @@ export default class SidChrome {
   async launchSocketServer() {
 
     return new Promise((resolve, reject)=> {
-      this.wsServer = new WebSocketServer({ port: this.POST_WS });
+      this.wsServer = new WebSocketServer();
       this.wsServer.on('connection', function connection(ws) {    
         resolve();  
         console.log("WebSocket launched");
