@@ -30,10 +30,23 @@ export default class SidChrome {
     //TODO
   }
 
+  /**raspberyy
+   * sudo apt install chromium-browser chromium-codecs-ffmpeg
+   */
+
+
+
   async launchBrowser() {
     this.browser = await puppeteer.launch({
-      ignoreDefaultArgs: ['--mute-audio'],
+      headless: true,
+      executablePath: '/usr/bin/chromium-browser',
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+      ignoreDefaultArgs: ['--mute-audio']
     });
+
+  /* this.browser = await puppeteer.launch({
+      ignoreDefaultArgs: ['--mute-audio'],
+    });*/
     this.page = await this.browser.newPage();    
     await this.page.goto('http://localhost:'+this.PORT_WEB+"/index.html");  
     console.log("Browser Launched");
