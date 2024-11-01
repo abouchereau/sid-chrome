@@ -72,6 +72,7 @@ class SidAudio  {
 
             this.socket.onopen = e=>{
                 console.log("Socket Open");
+                this.send("Socket Open");
                 resolve();
             };
     

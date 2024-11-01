@@ -35,7 +35,6 @@ export default class SidChrome {
       ignoreDefaultArgs: ['--mute-audio'],
     });
     this.page = await this.browser.newPage();    
-    
     await this.page.goto('http://localhost:'+this.PORT_WEB+"/index.html");  
     console.log("Browser Launched");
   }
@@ -60,14 +59,14 @@ export default class SidChrome {
   }
 
   async launchSocketServer() {
-
     return new Promise((resolve, reject)=> {
-      this.wsServer = new WebSocketServer();
+      this.wsServer = new WebSocketServer({port: this.POST_WS});
+      console.log("WebSocket launched");
       this.wsServer.on('connection', function connection(ws) {    
-        resolve();  
-        console.log("WebSocket launched");
+        console.log("WebSocket connexion");
           ws.on('error', console.error);     
         });
+      resolve();  
       });
     }
 
@@ -77,7 +76,6 @@ export default class SidChrome {
           socket.terminate();
         }
       });
-
     }
 
     sendMessageSocket(data, isJson=true) {
