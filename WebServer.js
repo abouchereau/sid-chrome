@@ -36,6 +36,7 @@ export default class WebServer {
             });
             
             this.server.listen(this.port,()=>{
+                console.log("server is listening on port "+this.port);
                 resolve();
             })
         });

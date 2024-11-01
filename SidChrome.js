@@ -20,7 +20,7 @@ export default class SidChrome {
   }
 
   async startAll() {
-  //  await this.launchWebServer();
+    await this.launchWebServer();
     await this.launchSocketServer();
     await this.launchBrowser();
     await this.clickStart();
