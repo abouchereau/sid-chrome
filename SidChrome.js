@@ -9,14 +9,14 @@ export default class SidChrome {
 
 //TODo : close methods
 
-  constructor(portWeb, portWebSocket, path) {
+  constructor(portWeb, portWebSocket) {
     this.PORT_WEB = portWeb;
     this.POST_WS = portWebSocket;
     this.bowser = null;
     this.pageWeb = null;
     this.server = null;
     this.wsServer = null;
-    this.webServer = new WebServer(this.PORT_WEB, path);
+    this.webServer = new WebServer(this.PORT_WEB, "/public");
   }
 
   async startAll() {
