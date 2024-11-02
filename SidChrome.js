@@ -9,14 +9,14 @@ export default class SidChrome {
 
 //TODo : close methods
 
-  constructor() {
-    this.PORT_WEB = 3615;
-    this.POST_WS = 3616;
+  constructor(portWeb, portWebSocket, path) {
+    this.PORT_WEB = portWeb;
+    this.POST_WS = portWebSocket;
     this.bowser = null;
     this.pageWeb = null;
     this.server = null;
     this.wsServer = null;
-    this.webServer = new WebServer(this.PORT_WEB, "/public");
+    this.webServer = new WebServer(this.PORT_WEB, path);
   }
 
   async startAll() {
@@ -39,8 +39,8 @@ export default class SidChrome {
   async launchBrowser() {
     this.browser = await puppeteer.launch({
       headless: true,
-      executablePath: '/usr/bin/chromium-browser',
-//      executablePath: '/usr/bin/chromium',
+//      executablePath: '/usr/bin/chromium-browser',
+      executablePath: '/usr/bin/chromium',
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
       ignoreDefaultArgs: ['--mute-audio']
     });
@@ -50,12 +50,12 @@ export default class SidChrome {
     });*/
     this.page = await this.browser.newPage();    
     await this.page.goto('http://localhost:'+this.PORT_WEB+"/index.html");  
-    console.log("Browser Launched");
+    console.log("Chromium Launched");
   }
 
   async stopBrowser() {
       await this.browser.close();
-      console.log("Browser closed");
+      console.log("Chromium closed");
   }
 
   async clickStart() {
@@ -75,7 +75,7 @@ export default class SidChrome {
   async launchSocketServer() {
     return new Promise((resolve, reject)=> {
       this.wsServer = new WebSocketServer({port: this.POST_WS});
-      console.log("WebSocket launched");
+      console.log("WebSocket launched on port "+this.POST_WS);
       this.wsServer.on('connection', function connection(ws) {    
         console.log("WebSocket connexion");
           ws.on('error', console.error);     
