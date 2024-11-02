@@ -1,4 +1,4 @@
-import puppeteer from 'puppeteer';
+import puppeteer from 'puppeteer-core';
 import { WebSocketServer, WebSocket } from 'ws';
 import WebServer from './WebServer.js';
 
@@ -40,6 +40,7 @@ export default class SidChrome {
     this.browser = await puppeteer.launch({
       headless: true,
       executablePath: '/usr/bin/chromium-browser',
+//      executablePath: '/usr/bin/chromium',
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
       ignoreDefaultArgs: ['--mute-audio']
     });
