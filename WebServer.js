@@ -15,24 +15,29 @@ export default class WebServer {
         return new Promise((resolve, reject)=>{
         
             this.server = http.createServer((request, response)=>{
-                try {
-                    const requestUrl = url.parse(request.url)
+                try {                    
+                    const requestUrl = url.parse(request.url);
                     const fsPath = this.baseDir+path.normalize(requestUrl.pathname);            
-                    const fileStream = fs.createReadStream(fsPath)
-                    fileStream.pipe(response)
-                    fileStream.on('open', function() {
-                        response.writeHead(200)
-                    })
-                    fileStream.on('error',function(e) {
-                        response.writeHead(404)     // assume the file doesn't exist
-                        response.end()
-                    })
-            } catch(e) {
-                    response.writeHead(500)
-                    response.end()     // end the response so browsers don't hang
-                    console.log(e.stack);
-                    reject();
-            }
+                    const fileStream = fs.createReadStream(fsPath);
+                    fileStream.pipe(response);
+                    fileStream.on('open',()=>{
+                        const tmp = requestUrl.pathname.split(".");
+                        const ext = tmp[tmp.length-1];
+                        if (ext == "js") {
+                            response.setHeader("Content-Type", "application/javascript");
+                        }                        
+                        response.writeHead(200);
+                    });
+                    fileStream.on('error',(e)=>{
+                        response.writeHead(404);     // assume the file doesn't exist
+                        response.end();
+                    });
+                } catch(e) {
+                    response.writeHead(500);
+                    response.end();     // end the response so browsers don't hang
+                    //console.log(e.stack);
+                    //reject();
+                }
             });
             
             this.server.listen(this.port,()=>{

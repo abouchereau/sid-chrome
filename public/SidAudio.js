@@ -18,7 +18,8 @@ class SidAudio  {
     async init() {
         this.audioContext = new AudioContext({
             latencyHint: 0.05,
-            sampleRate: 44100});
+            sampleRate: 44100
+        });
         // Chargement du module AudioWorklet
         await this.audioContext.audioWorklet.addModule("SidWorklet.js");
 

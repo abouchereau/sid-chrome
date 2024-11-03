@@ -8,21 +8,12 @@
 </head>
 <body>
     <button id="start-btn">START</button>
-   <!-- <audio id="audio">
-        <source src="test.flac" type="audio/flac">
-    </audio>     -->
-      <script>
-        //document.getElementById('start-btn').addEventListener('click',(e)=> {
-            //document.getElementById('audio').play();
-        //})
-(async()=>{
-    const sidAudio = new SidAudio();
-    await sidAudio.init();
-    document.getElementById('start-btn').addEventListener('click',(e)=> {
-            sidAudio.start();
-        })
-})();
-
-      </script>
+    <script type="text/javascript">        
+        (async()=>{
+            const sidAudio = new SidAudio();
+            await sidAudio.init();
+            document.getElementById('start-btn').addEventListener('click',e=>sidAudio.start());
+        })();
+    </script>
 </body>
 </html>

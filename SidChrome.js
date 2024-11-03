@@ -39,8 +39,8 @@ export default class SidChrome {
   async launchBrowser() {
     this.browser = await puppeteer.launch({
       headless: true,
-      executablePath: '/usr/bin/chromium-browser',
-      //executablePath: '/usr/bin/chromium',
+      //executablePath: '/usr/bin/chromium-browser',
+      executablePath: '/usr/bin/chromium',
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
       ignoreDefaultArgs: ['--mute-audio']
     });
@@ -94,8 +94,11 @@ export default class SidChrome {
 
     sendMessageSocket(data, isJson=true) {
       let strData = isJson?JSON.stringify(data):data;
+
+      //console.log("presend", strData);
       this.wsServer.clients.forEach(client => {
         if (client.readyState === WebSocket.OPEN) {
+          console.log("SEND", strData);
           client.send(strData);
         }
       });    
