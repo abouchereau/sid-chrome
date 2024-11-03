@@ -39,8 +39,8 @@ export default class SidChrome {
   async launchBrowser() {
     this.browser = await puppeteer.launch({
       headless: true,
-      //executablePath: '/usr/bin/chromium-browser',
-      executablePath: '/usr/bin/chromium',
+      executablePath: '/usr/bin/chromium-browser',
+      //executablePath: '/usr/bin/chromium',
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
       ignoreDefaultArgs: ['--mute-audio']
     });
