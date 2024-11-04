@@ -10,13 +10,16 @@ class SidAudio  {
     lastMemoryCompare = ["","",""];
 
     constructor() {//TODO : from url param
-        this.POST_WS = 3616;
-        this.NB_WORKLETS = 3
+
+        const urlParams = new URL(document.location.toString()).searchParams;
+        this.POST_WS = Number(urlParams.get('portSocket'));
+        this.LATENCY = Number(urlParams.get('latency'))
+        this.NB_WORKLETS = 3;
     }
 
     async init() {
         this.audioContext = new AudioContext({
-            latencyHint: 0.02,
+            latencyHint: this.LATENCY,
             sampleRate: 44100
         });
         // Chargement du module AudioWorklet
@@ -34,36 +37,7 @@ class SidAudio  {
         }
         await this.initWebSocket();
     }
-/*
-    async init() {
-        this.audioContext = new AudioContext({
-            latencyHint: 0.05,
-            sampleRate: 44100});
-        await this.audioContext.audioWorklet.addModule("SidWorklet.js");
-    
-        
-        this.scriptNode.push(await new AudioWorkletNode(this.audioContext, 'SidWorklet', {processorOptions: {"sidVoice":0}}));
-        this.scriptNode.push(await new AudioWorkletNode(this.audioContext, 'SidWorklet', {processorOptions: {"sidVoice":1}}));
-        this.scriptNode.push(await new AudioWorkletNode(this.audioContext, 'SidWorklet', {processorOptions: {"sidVoice":2}}));
-        this.panner.push(this.audioContext.createStereoPanner());
-        this.panner.push(this.audioContext.createStereoPanner());
-        this.panner.push(this.audioContext.createStereoPanner());
-        this.gain.push(this.audioContext.createGain());
-        this.gain.push(this.audioContext.createGain());
-        this.gain.push(this.audioContext.createGain());
 
-
-        for(let i=0;i<3;i++) {
-
-            this.scriptNode[i].connect(this.audioContext.destination);      
-            this.scriptNode[i].connect(this.gain[i]);        
-            this.gain[i].connect(this.panner[i]);     
-            this.panner[i].connect(this.audioContext.destination);
-        }
-
-       await this.initWebSocket();
-       
-    }*/
 
     initWebSocket() {
         return new Promise((resolve, reject)=> {

@@ -9,9 +9,10 @@ export default class SidChrome {
 
 //TODo : close methods
 
-  constructor(portWeb, portWebSocket) {
+  constructor(portWeb, portWebSocket, latency) {
     this.PORT_WEB = portWeb;
     this.POST_WS = portWebSocket;
+    this.LATENCY = latency;
     this.bowser = null;
     this.pageWeb = null;
     this.server = null;
@@ -49,7 +50,7 @@ export default class SidChrome {
       ignoreDefaultArgs: ['--mute-audio'],
     });*/
     this.page = await this.browser.newPage();    
-    await this.page.goto('http://localhost:'+this.PORT_WEB+"/index.html");  
+    await this.page.goto('http://localhost:'+this.PORT_WEB+"/index.html?latency="+this.LATENCY+"&portSocket="+this.POST_WS);  
     console.log("Chromium Launched");
   }
 
@@ -94,11 +95,8 @@ export default class SidChrome {
 
     sendMessageSocket(data, isJson=true) {
       let strData = isJson?JSON.stringify(data):data;
-
-      //console.log("presend", strData);
       this.wsServer.clients.forEach(client => {
         if (client.readyState === WebSocket.OPEN) {
-          console.log("SEND", strData);
           client.send(strData);
         }
       });    
