@@ -1,7 +1,7 @@
 import puppeteer from 'puppeteer-core';
 import { WebSocketServer, WebSocket } from 'ws';
 import WebServer from './WebServer.js';
-
+import si from 'systeminformation';
 
 
 export default class SidChrome {
@@ -37,10 +37,10 @@ export default class SidChrome {
 
 
   async launchBrowser() {
+    let os = await si.osInfo();
     this.browser = await puppeteer.launch({
-      headless: true,
-      //executablePath: '/usr/bin/chromium-browser',
-      executablePath: '/usr/bin/chromium',
+      headless: true,      
+      executablePath: os.distro=="LinuxMint"?'/usr/bin/chromium':'/usr/bin/chromium-browser',
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
       ignoreDefaultArgs: ['--mute-audio']
     });
