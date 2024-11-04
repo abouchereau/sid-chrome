@@ -97,6 +97,7 @@ export default class SidChrome {
       let strData = isJson?JSON.stringify(data):data;
       this.wsServer.clients.forEach(client => {
         if (client.readyState === WebSocket.OPEN) {
+          console.log(strData);
           client.send(strData);
         }
       });    
