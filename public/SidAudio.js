@@ -9,8 +9,7 @@ class SidAudio  {
     socket = null;
     lastMemoryCompare = ["","",""];
 
-    constructor() {
-        this.PORT_WEB = 8000;
+    constructor() {//TODO : from url param
         this.POST_WS = 3616;
         this.NB_WORKLETS = 3
     }
