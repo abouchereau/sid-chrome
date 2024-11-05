@@ -79,6 +79,7 @@ export default class SidChrome {
       console.log("WebSocket launched on port "+this.POST_WS);
       this.wsServer.on('connection', function connection(ws) {    
         console.log("WebSocket connexion");
+          ws.on('message',(msg) => console.log({ msg }));
           ws.on('error', console.error);     
         });
       resolve();  

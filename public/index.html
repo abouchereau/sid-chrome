@@ -8,11 +8,46 @@
 </head>
 <body>
     <button id="start-btn">START</button>
-    <script type="text/javascript">        
+    <script type="text/javascript">   
+        const sidAudio = new SidAudio();
+      
+        const originalConsoleWarn = console.warn;
+        console.warn = function(...args) {
+            originalConsoleWarn(...args);
+            const message = args.map(arg => 
+                typeof arg === 'object' ? JSON.stringify(arg) : arg
+            ).join(' ');
+            sidAudio.sendSocket("WEB.WARN : "+message);
+        };
+
+        const originalConsoleLog = console.log;
+        console.error = function(...args) {
+            originalConsoleLog(...args);
+            const message = args.map(arg => 
+                typeof arg === 'object' ? JSON.stringify(arg) : arg
+            ).join(' ');
+            sidAudio.sendSocket("WEB.LOG : "+message);
+        };
+
+        const originalConsoleError = console.error;
+        console.error = function(...args) {
+            originalConsoleError(...args);
+            const message = args.map(arg => 
+                typeof arg === 'object' ? JSON.stringify(arg) : arg
+            ).join(' ');
+            sidAudio.sendSocket("WEB.ERROR : "+message);
+        };
+
+
+
         (async()=>{
-            const sidAudio = new SidAudio();
+            
             await sidAudio.init();
             document.getElementById('start-btn').addEventListener('click',e=>sidAudio.start());
+            setInterval(()=>{
+                console.log("YOP");
+                console.error("YOP");
+            },2000);
         })();
     </script>
 </body>

@@ -46,7 +46,7 @@ class SidAudio  {
 
             this.socket.onopen = e=>{
                 console.log("Socket Open");
-                this.send("Socket Open");
+                this.socket.send("Socket Open");
                 resolve();
             };
     
@@ -65,8 +65,13 @@ class SidAudio  {
                     this.send(JSON.parse(e.data));
                 }
             };
-
         })
+    }
+
+    sendSocket(str) {
+        if (this.socket.readyState  !== WebSocket.CLOSED) {
+            this.socket.send(str);
+        }
     }
 
     pan(voice, value) {//value de -100 à 100
@@ -93,5 +98,6 @@ class SidAudio  {
         }
             
     }
+    
 
 }
